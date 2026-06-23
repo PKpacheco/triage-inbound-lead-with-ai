@@ -37,6 +37,71 @@ HTTP webhook
        v
 Live processing queue
 ```
+## Example
+
+The following example shows how the application processes a simulated inbound website inquiry.
+
+### Incoming Contact
+
+```text
+Name: Jordan Lee
+Email: jordan@example.com
+
+Message:
+Hi, I manage a sports bar in Winnipeg with 18 TVs.
+We are interested in learning more about the product and would like to schedule a demo.
+```
+
+### Extracted Information
+
+The local Llama model analyzes the unstructured message and extracts the relevant operational data:
+
+```text
+City: Winnipeg
+Number of TVs: 18
+Request type: Sales inquiry
+```
+
+### Routing Decision
+
+The application combines the extracted information with predefined business rules:
+
+```text
+Assigned department: Sales
+Priority: High
+Classification: High-Priority Sales
+```
+
+Because the contact represents a venue with a larger number of TVs, the inquiry is prioritized for the Sales team.
+
+### Webhook Payload
+
+The application converts the processed information into a structured JSON payload and sends it to the configured HTTP endpoint.
+
+During development, the request was tested and inspected using Webhook.site.
+
+```json
+{
+  "name": "Jordan Lee",
+  "email": "jordan@example.com",
+  "city": "Winnipeg",
+  "tv_count": 18,
+  "department": "Sales",
+  "priority": "High",
+  "classification": "High-Priority Sales",
+  "message": "Hi, I manage a sports bar in Winnipeg with 18 TVs. We are interested in learning more about the product and would like to schedule a demo."
+}
+```
+
+### Live Queue
+
+After the webhook is sent, the processed contact appears in the application’s live history table.
+
+```text
+Jordan Lee | Winnipeg | 18 TVs | Sales | High-Priority Sales
+```
+
+> This example uses simulated contact information. The exact model output may vary, and the JSON field names should match the implementation in the application.
 
 ## Webhook Testing
 
